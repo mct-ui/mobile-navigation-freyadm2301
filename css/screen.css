@@ -41,6 +41,11 @@ html {
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+.has-mobile-nav {
+    overflow: hidden;
 }
 
 *,
@@ -171,7 +176,7 @@ hr {
 
 a {
     color: #5051DB;
-    transition: all .1s ease-in-out;
+    transition: all .1s ease;
 }
 
 a:visited,
@@ -264,19 +269,19 @@ a:focus {
 }
 
 .o-section + .o-section {
-    padding-top: 24px;
+    margin-top: 24px;
 }
 
 @media (min-width: 768px) {
     .o-section--lg + .o-section--lg,
     .o-section--xl + .o-section--xl {
-        padding-top: 48px;
+        margin-top: 48px;
     }
 }
 
 @media (min-width: 1200px) {
     .o-section--xl + .o-section--xl {
-        padding-top: 72px;
+        margin-top: 72px;
     }
 }
 
@@ -289,8 +294,6 @@ a:focus {
 */
 
 .o-layout {
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
     flex-wrap: wrap;
 }
@@ -480,16 +483,20 @@ a:focus {
 }
 
 @media (min-width: 992px) {
+    .c-header__logo,
     .c-header__nav {
-        display: block;
+        flex-grow: 1;
+        flex-basis: 50%;
+    }
+
+    .c-header__nav {
+        display: flex;
+        justify-content: flex-end;
     }
 
     .c-header__nav--main {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        margin-top: 12px;
+        flex-grow: 2;
+        justify-content: center;
     }
 
     .c-header__mobile-nav-trigger {
@@ -563,7 +570,6 @@ a:focus {
         left: 50%;
         transform: translate(-50%, -50%);
     }
-
     .c-footer__logo .c-logo {
         margin-bottom: 0;
     } */
@@ -582,6 +588,7 @@ a:focus {
     margin-bottom: 24px;
     width: 24px;
     height: 24px;
+    outline: none;
 }
 
 .c-nav-trigger__svg {
@@ -758,6 +765,10 @@ a:focus {
     margin-right: 20px;
 }
 
+.c-title-icon__path {
+    fill: #202024;
+}
+
 @media (min-width: 768px) {
     .c-title-icon__icon {
         height: 84px;
@@ -784,7 +795,6 @@ a:focus {
     line-height: 24px;
     font-weight: 400;
     padding: 4px 0;
-    transition: color .175s ease-in;
 }
 
 .c-link-cta,
@@ -806,7 +816,7 @@ a:focus {
     transform-origin: left;
     transition-property: transform, background-color;
     transition-duration: .175s;
-    transition-timing-function: ease-in;
+    transition-timing-function: ease;
 }
 
 .c-link-cta:hover {
@@ -833,6 +843,36 @@ a:focus {
 }
 
 /*
+    Component: page
+    ---
+    Page component for mobile nav transition
+*/
+
+.c-page {
+    position: relative;
+    will-change: transform;
+    transition: transform .25s ease;
+}
+
+.has-mobile-nav .c-page {
+    /* option 1 scale */
+    /* transform: scale(.98); */
+
+    /* option 2 push left */
+    /* transform: translateX(100%); */
+
+    /* option 3 slide left */
+    transform: translateX(25%);
+}
+
+@media (min-width: 992px) {
+    /* Reset the transform on larger viewports */
+    .c-page {
+        transform: none !important;
+    }
+}
+
+/*
     Component: mobile nav
     ---
     Dedicated mobile nav component
@@ -844,13 +884,10 @@ a:focus {
     right: 0;
     left: 0;
     height: 100vh;
-    opacity: 0;
     pointer-events: none;
-    transition: opacity .25s;
 }
 
 .has-mobile-nav .c-mobile-nav {
-    opacity: 1;
     pointer-events: auto;
 }
 
@@ -862,38 +899,30 @@ a:focus {
 }
 
 .c-mobile-nav__bg {
-    transform: translateX(0);
-    transition: transform .25s ease;
-    opacity: 0;
-    transition: opacity .25s ease;
-}
-
-.has-mobile-nav .c-mobile-nav__bg {
-    opacity: 0.5;
-}
-.c-page{
-    transform: translateX(0);
-    transition: transform .25s ease;
-    
-}
-.has-mobile-nav .c-page{
-    transform: translateX(25%);
-    opacity: 0.5;
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     background-color: #202024;
+    will-change: opacity;
+    opacity: 0;
+    transition: opacity .25s ease;
 }
+
+.has-mobile-nav .c-mobile-nav__bg {
+    opacity: .5;
+}
+
 .c-mobile-nav__body {
     position: relative;
     padding: 24px;
     height: 100vh;
     width: 100vw;
     background-color: #fff;
+    will-change: transform;
     transform: translateX(-100%);
-    transition: translate .25s ease;
+    transition: transform .25s ease;
 }
 
 .has-mobile-nav .c-mobile-nav__body {
@@ -912,7 +941,6 @@ a:focus {
         display: none !important;
     }
 }
-
 
 /*------------------------------------*\
   #UTILITIES
@@ -1202,7 +1230,6 @@ a:focus {
         flex-basis: calc(100% / 6 * 5) !important;
     }
 }
-
 /*------------------------------------*\
   #MEDIA
 \*------------------------------------*/
